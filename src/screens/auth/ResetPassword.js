@@ -4,7 +4,7 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 import * as Linking from 'expo-linking';
 import { confirmPasswordReset } from 'firebase/auth';
-import { auth } from '../../firebase';
+import { auth } from '../../services/firebase';
 
 export default function ResetPassword({ navigation, route }){
   const [code, setCode] = React.useState(route?.params?.oobCode || '');

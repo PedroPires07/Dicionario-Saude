@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
 import Card from '../../components/Card';
 import TermCard from '../../components/TermCard';
-import { db, auth } from '../../firebase';
+import { db, auth } from '../../services/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { toggleFavorite, getFavoritesSet } from '../../services/terms';
 

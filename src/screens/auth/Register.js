@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { auth, db } from '../../firebase';
+import { auth, db } from '../../services/firebase';
 import { doc, setDoc } from 'firebase/firestore';
 
 export default function Register({ navigation }) {

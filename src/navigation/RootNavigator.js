@@ -4,7 +4,7 @@ import AuthStack from './auth/AuthStack';
 import AppTabs from './tabs/AppTabs';
 import Splash from '../screens/Splash';
 import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../firebase';
+import { auth } from '../services/firebase';
 
 const Stack = createNativeStackNavigator();
 

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-nati
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../firebase';
+import { auth } from '../../services/firebase';
 
 export default function Login({ navigation }){
   const [email, setEmail] = React.useState('');

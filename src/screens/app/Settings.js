@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet, ScrollView, Alert } from 'react-native';
 import Button from '../../components/Button';
-import { auth, db } from '../../firebase';
+import { auth, db } from '../../services/firebase';
 import { signOut, updateEmail, updatePassword, updateProfile, reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 

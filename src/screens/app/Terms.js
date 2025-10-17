@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TextInput, ScrollView } from 'react-native';
 import { collection, getDocs } from 'firebase/firestore';
-import { db, auth } from '../../firebase';
+import { db, auth } from '../../services/firebase';
 import TermCard from '../../components/TermCard';
 import { getFavoritesSet, toggleFavorite } from '../../services/terms';
 
