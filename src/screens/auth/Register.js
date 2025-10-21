@@ -23,13 +23,12 @@ export default function Register({ navigation }) {
       if (!strongEnough(password)) throw new Error('A senha deve ter no mínimo 8 caracteres e 1 número.');
       const res = await createUserWithEmailAndPassword(auth, email.trim(), password);
       await updateProfile(res.user, { displayName: name });
-      // src/screens/auth/Register.js (trecho)
       await setDoc(doc(db, 'profiles', res.user.uid), {
         id: res.user.uid,
         nome: name,
         email: email.trim(),
-        role: 'viewer',        // usuários do app são 'viewer'
-        origem: 'app',         // <- marca de origem
+        role: 'viewer',        
+        origem: 'app',         
         ativo: true,
         ultimoAcesso: new Date().toISOString(),
       }, { merge: true });
@@ -43,7 +42,6 @@ export default function Register({ navigation }) {
       <View style={{ height: 120 }} />
       <View style={styles.card}>
         <Text style={styles.title}>Cadastrar</Text>
-        <Text style={styles.subtitle}>Lorem ipsum</Text>
         <Input icon='person' placeholder='Nome' value={name} onChangeText={setName} style={{ marginTop: 16 }} />
         <Input icon='mail' placeholder='Email' value={email} onChangeText={setEmail} keyboardType='email-address' style={{ marginTop: 12 }} />
         <Input icon='lock-closed' placeholder='Senha' value={password} onChangeText={setPassword} secure style={{ marginTop: 12 }} />

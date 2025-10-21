@@ -23,7 +23,6 @@ export default function Login({ navigation }){
       <View style={{ height:140 }} />
       <View style={styles.card}>
         <Text style={styles.title}>Entrar</Text>
-        <Text style={styles.subtitle}>Lorem ipsum</Text>
         <Input icon='mail' placeholder='Email' value={email} onChangeText={setEmail} style={{ marginTop:16 }} keyboardType='email-address' />
         <Input icon='lock-closed' placeholder='Senha' value={password} onChangeText={setPassword} secure style={{ marginTop:12 }} />
         <TouchableOpacity onPress={()=>navigation.navigate('ForgotPassword')} style={{ marginTop:8 }}>
@@ -31,12 +30,10 @@ export default function Login({ navigation }){
         </TouchableOpacity>
         <View style={{ flexDirection:'row', alignItems:'center', marginTop:12 }}>
           <TouchableOpacity onPress={()=>setRemember(!remember)} style={styles.checkbox}><View style={[styles.check, remember ? styles.checkOn : null]} /></TouchableOpacity>
-          <Text>Remember me</Text>
+          <Text>Lembre-se de mim</Text>
         </View>
         {error ? <Text style={{ color:'#DC2626', marginTop:8 }}>{error}</Text> : null}
         <Button title='Entrar' onPress={handleLogin} loading={loading} style={{ marginTop:16 }} />
-        <View style={{ alignItems:'center', marginTop:18 }}><Text>ou</Text></View>
-        <View style={{ alignItems:'center', marginTop:18 }}><Text style={{ color:'#6B7280' }}>(Login social não configurado)</Text></View>
         <View style={{ alignItems:'center', marginTop:28 }}>
           <Text>Não tem conta? <Text style={{ color:'#1D4ED8' }} onPress={()=>navigation.navigate('Register')}>Cadastre-se</Text></Text>
         </View>

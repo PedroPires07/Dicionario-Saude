@@ -1,5 +1,10 @@
-import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc, collection, getDocs } from 'firebase/firestore';
 import { db } from './firebase';
+
+export async function getTerms() {
+  const snap = await getDocs(collection(db, 'termos'));
+  return snap.docs.map(d => ({ id: d.id, ...(d.data()) }));
+}
 
 export async function getFavoritesSet(uid){
   if(!uid) return new Set();
