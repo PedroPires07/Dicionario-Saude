@@ -1,7 +1,9 @@
 // src/screens/Favorites.js
 import React from 'react'
-import { ScrollView, Text, View, ActivityIndicator, TouchableOpacity } from 'react-native'
+import { ScrollView, Text, View, ActivityIndicator, TouchableOpacity, StyleSheet } from 'react-native'
+import { Platform } from 'react-native'
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
+import { Ionicons } from '@expo/vector-icons'
 import { auth } from '../../services/firebase'
 import TermCard from '../../components/TermCard'
 import { getFavoritesSet, toggleFavorite, getTerms } from '../../services/terms'
@@ -120,35 +122,115 @@ export default function Favorites() {
 
   // lista
   return (
-    <ScrollView
-      style={{ flex: 1, backgroundColor: '#F9FAFB', padding: 16 }}
-      contentContainerStyle={{
-        flexGrow: 1,
-        ...(terms.length === 0 && { justifyContent: 'center' }),
-      }}
-    >
-      {terms.length === 0 ? (
-        <View style={{ alignItems: 'center' }}>
-          <Text style={{ textAlign: 'center', color: '#6B7280', fontSize: 16, marginBottom: 8 }}>
-            Nenhum favorito ainda.
-          </Text>
-          <Text style={{ textAlign: 'center', color: '#9CA3AF', fontSize: 14 }}>
-            Adicione termos aos favoritos para vê-los aqui.
-          </Text>
-        </View>
-      ) : (
-        <View style={{ gap: 12 }}>
-          {terms.map((t) => (
-            <TermCard
-              key={t.id}
-              term={t}
-              isFav={favSet.has(t.id)}
-              onToggleFav={() => handleToggleFav(t.id)}
-              onPress={() => handleTermPress(t)}
-            />
-          ))}
-        </View>
-      )}
-    </ScrollView>
+    <View style={styles.container}>
+      {/* Header roxo */}
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Favoritos</Text>
+        <Text style={styles.headerSubtitle}>Seus termos salvos aparecerão aqui</Text>
+      </View>
+
+      {/* Conteúdo */}
+      <ScrollView
+        style={styles.content}
+        contentContainerStyle={{
+          flexGrow: 1,
+          ...(terms.length === 0 && { justifyContent: 'center', alignItems: 'center' }),
+        }}
+      >
+        {terms.length === 0 ? (
+          <View style={styles.emptyState}>
+            <View style={styles.iconContainer}>
+              <Ionicons name="heart-outline" size={40} color="#FFFFFF" />
+            </View>
+            <Text style={styles.emptyTitle}>Você ainda não tem favoritos</Text>
+            <Text style={styles.emptySubtitle}>
+              Marque seus termos preferidos como favoritos para acessá-los rapidamente
+            </Text>
+            <TouchableOpacity 
+              style={styles.button}
+              onPress={() => navigation.navigate('Home')}
+            >
+              <Text style={styles.buttonText}>Explorar termos</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View style={{ padding: 16, gap: 12 }}>
+            {terms.map((t) => (
+              <TermCard
+                key={t.id}
+                term={t}
+                isFav={favSet.has(t.id)}
+                onToggleFav={() => handleToggleFav(t.id)}
+                onPress={() => handleTermPress(t)}
+              />
+            ))}
+          </View>
+        )}
+      </ScrollView>
+    </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F9FAFB',
+  },
+  header: {
+    backgroundColor: '#2D1C87',
+    paddingTop: Platform.OS === 'ios' ? 60 : 50,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    marginBottom: 4,
+  },
+  headerSubtitle: {
+    fontSize: 14,
+    color: '#E0E0E0',
+  },
+  content: {
+    flex: 1,
+  },
+  emptyState: {
+    alignItems: 'center',
+    paddingHorizontal: 40,
+  },
+  iconContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 16,
+    backgroundColor: '#2D1C87',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 24,
+  },
+  emptyTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#1F2937',
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  emptySubtitle: {
+    fontSize: 14,
+    color: '#6B7280',
+    textAlign: 'center',
+    lineHeight: 20,
+    marginBottom: 24,
+  },
+  button: {
+    backgroundColor: '#2D1C87',
+    paddingVertical: 14,
+    paddingHorizontal: 32,
+    borderRadius: 24,
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+});

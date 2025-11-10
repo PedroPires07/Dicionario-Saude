@@ -1,6 +1,5 @@
-// src/screens/Home.js
 import React from 'react'
-import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, TextInput, ScrollView, Platform, Image } from 'react-native'
 import Card from '../../components/Card'
 import TermCard from '../../components/TermCard'
 import { db, auth } from '../../services/firebase'
@@ -67,7 +66,12 @@ export default function Home({ navigation }) {
       style={{ flex: 1, backgroundColor: '#2D1C87' }}
       contentContainerStyle={{ paddingBottom: 24 }}
     >
-      <View style={{ height: 36 }} />
+      <View style={styles.headerContainer}>
+        <Image 
+          source={require('../../../assets/Exclude.png')} 
+          style={styles.headerLogo}
+        />
+      </View>
 
       <View style={{ paddingHorizontal: 16 }}>
         <View style={styles.searchWrap}>
@@ -127,6 +131,17 @@ export default function Home({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  headerContainer: {
+    paddingTop: Platform.OS === 'ios' ? 60 : 45,
+    paddingHorizontal: 16,
+    paddingBottom: 16,
+    alignItems: 'flex-start',
+  },
+  headerLogo: {
+    width: 32,
+    height: 32,
+    resizeMode: 'contain',
+  },
   searchWrap: {
     backgroundColor: '#fff',
     borderRadius: 10,

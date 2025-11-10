@@ -38,9 +38,9 @@ export default function TermCard({ term, isFav, onToggleFav, onPress }) {
           accessibilityLabel={isFav ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
         >
           <Ionicons
-            name={isFav ? 'star' : 'star-outline'}
+            name={isFav ? 'heart' : 'heart-outline'}
             size={22}
-            color={isFav ? '#F59E0B' : '#9CA3AF'}
+            color={isFav ? '#DC2626' : '#9CA3AF'}
           />
         </TouchableOpacity>
       </View>
