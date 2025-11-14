@@ -192,10 +192,10 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#2D1C87',
-    paddingTop: Platform.OS === 'ios' ? 60 : 40,
+    paddingTop: Platform.OS === 'ios' ? 60 : 45,
     paddingBottom: 16,
-    paddingHorizontal: 20,
-    alignItems: 'center',
+    paddingHorizontal: 16,
+    alignItems: 'flex-start',
   },
   headerTitle: {
     fontSize: 20,
