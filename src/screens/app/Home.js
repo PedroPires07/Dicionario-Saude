@@ -107,7 +107,7 @@ export default function Home({ navigation }) {
       </View>
 
       <View style={{ paddingHorizontal: 16, marginTop: 16 }}>
-        <Text style={{ fontWeight: '700', marginBottom: 8 }}>Termos Recentes</Text>
+        <Text style={{ fontWeight: '700', marginBottom: 8, color: '#FFFFFF' }}>Termos Recentes</Text>
         {filtered.length === 0 ? (
           <Card>
             <Text style={{ textAlign: 'center', color: '#6B7280' }}>
