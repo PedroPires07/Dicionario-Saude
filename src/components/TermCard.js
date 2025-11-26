@@ -13,6 +13,12 @@ import { Ionicons } from '@expo/vector-icons'
  */
 export default function TermCard({ term, isFav, onToggleFav, onPress }) {
   const chips = term?.tags || term?.areas || []
+  
+  // Se não tiver nome científico, usa o primeiro nome popular como título
+  const titulo = term?.cientifico || (term?.populares?.[0]) || 'Termo sem nome'
+  const subtitulo = term?.cientifico && term?.populares?.length 
+    ? term.populares.join(', ')
+    : (term?.populares?.length > 1 ? term.populares.slice(1).join(', ') : null)
 
   return (
     <Card style={{ marginBottom: 12 }}>
@@ -24,9 +30,9 @@ export default function TermCard({ term, isFav, onToggleFav, onPress }) {
           onPress={onPress}
           style={{ flex: 1, paddingRight: 12 }}
         >
-          <Text style={styles.title}>{term?.cientifico || '—'}</Text>
-          {!!(term?.populares?.length) && (
-            <Text style={styles.subtitle}>{term.populares.join(', ')}</Text>
+          <Text style={styles.title}>{titulo}</Text>
+          {!!subtitulo && (
+            <Text style={styles.subtitle}>{subtitulo}</Text>
           )}
         </TouchableOpacity>
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, ActivityIndicator, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import Markdown from 'react-native-markdown-display';
 const { askHealthQuestion } = require('../../services/openai');
 
 export default function AI() {
@@ -135,12 +136,15 @@ export default function AI() {
               styles.messageContent,
               message.sender === 'user' ? styles.userContent : styles.aiContent
             ]}>
-              <Text style={[
-                styles.messageText,
-                message.sender === 'user' ? styles.userText : styles.aiText
-              ]}>
-                {message.text}
-              </Text>
+              {message.sender === 'user' ? (
+                <Text style={[styles.messageText, styles.userText]}>
+                  {message.text}
+                </Text>
+              ) : (
+                <Markdown style={markdownStyles}>
+                  {message.text}
+                </Markdown>
+              )}
             </View>
           </View>
         ))}
@@ -312,3 +316,47 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
 });
+
+const markdownStyles = {
+  body: {
+    color: '#1F2937',
+    fontSize: 15,
+    lineHeight: 20,
+  },
+  paragraph: {
+    marginTop: 0,
+    marginBottom: 8,
+  },
+  strong: {
+    fontWeight: '700',
+  },
+  em: {
+    fontStyle: 'italic',
+  },
+  bullet_list: {
+    marginTop: 4,
+    marginBottom: 8,
+  },
+  ordered_list: {
+    marginTop: 4,
+    marginBottom: 8,
+  },
+  list_item: {
+    marginBottom: 4,
+  },
+  code_inline: {
+    backgroundColor: '#F3F4F6',
+    color: '#DC2626',
+    paddingHorizontal: 4,
+    paddingVertical: 2,
+    borderRadius: 4,
+    fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace',
+  },
+  code_block: {
+    backgroundColor: '#F3F4F6',
+    padding: 12,
+    borderRadius: 8,
+    marginVertical: 8,
+    fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace',
+  },
+};

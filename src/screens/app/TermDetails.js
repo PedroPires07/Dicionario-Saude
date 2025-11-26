@@ -58,9 +58,12 @@ export default function TermDetails({ route }){
   const titulo   = term.cientifico || '—'
   const subtit   = (term.populares || []).join(', ')
   const chips    = term.tags || term.areas || ['Medicina','Exames']  // adapte às suas chaves
-  const descr    = term.descricao || 'Sem descrição.'
+  const descr    = term.descricao || term.descricão || term.description || 'Sem descrição.'
   const status   = term.status || 'Verificado'
   const revisado = term.revisadoEm || '01/01/2025'  // ajuste se tiver campo de data
+  
+  // Debug: verificar dados do Firestore
+  console.log('Termo do Firestore:', term)
 
   return (
     <ScrollView style={{ flex:1, backgroundColor:'#F3F4F6' }} contentContainerStyle={{ padding:16, paddingBottom:32 }}>

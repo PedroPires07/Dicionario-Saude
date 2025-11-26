@@ -47,6 +47,17 @@ export default function Terms(){
     };
   }, [loadTerms]);
 
+  // Recarregar favoritos quando a tela receber foco
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', async () => {
+      const uid = auth.currentUser?.uid;
+      const favs = await getFavoritesSet(uid);
+      setFavSet(favs);
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   const filtered = terms.filter(t => {
     // Filtro de busca
     const matchesSearch = !search || 
