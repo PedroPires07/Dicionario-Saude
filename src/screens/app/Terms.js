@@ -138,7 +138,11 @@ export default function Terms(){
   }
 
   function handleTermPress(term) {
-    navigation.navigate('TermDetails', { termId: term.id, term });
+    navigation.navigate('TermDetails', { 
+      termId: term.id, 
+      term,
+      isFavorite: favSet.has(term.id), // passa o estado de favorito
+    });
   }
 
   return (

@@ -29,6 +29,17 @@ export default function Home({ navigation }) {
     }
   }, [])
 
+  // Recarregar favoritos quando a tela receber foco
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', async () => {
+      const uid = auth.currentUser?.uid
+      const favs = await getFavoritesSet(uid)
+      setFavSet(favs)
+    })
+
+    return unsubscribe
+  }, [navigation])
+
   const filtered = terms.filter((t) => {
     if (!search) return true
     const q = search.toLowerCase()
@@ -58,6 +69,7 @@ export default function Home({ navigation }) {
     navigation.navigate('TermDetails', {
       termId: term.id,
       term, // para render imediato na tela de detalhes
+      isFavorite: favSet.has(term.id), // passa o estado de favorito
     })
   }
 

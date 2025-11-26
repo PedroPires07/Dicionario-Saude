@@ -1,14 +1,24 @@
 import React from 'react'
-import { View, Text, ScrollView } from 'react-native'
-import { doc, getDoc, setDoc, deleteDoc } from 'firebase/firestore'
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
+import { doc, getDoc } from 'firebase/firestore'
 import { db, auth } from '../../services/firebase'
+import { Ionicons } from '@expo/vector-icons'
+import { useFocusEffect } from '@react-navigation/native'
+import { toggleFavorite, getFavoritesSet } from '../../services/terms'
 import Card from '../../components/Card'
 
 export default function TermDetails({ route }){
-  const { termId, term: termFromList } = route.params || {}
+  const { termId, term: termFromList, isFavorite } = route.params || {}
   const [term, setTerm] = React.useState(termFromList || null)
-  const [isFav, setIsFav] = React.useState(false)
+  const [isFav, setIsFav] = React.useState(isFavorite ?? false)
 
+  // Atualiza o estado quando o parâmetro isFavorite mudar
+  React.useEffect(() => {
+    if (isFavorite !== undefined) {
+      console.log('Atualizando isFav de params:', isFavorite)
+      setIsFav(isFavorite)
+    }
+  }, [isFavorite])
   
   React.useEffect(()=>{
     let mounted = true
@@ -23,28 +33,29 @@ export default function TermDetails({ route }){
     return ()=>{ mounted = false }
   },[termId])
 
- 
-  React.useEffect(()=>{
-    ;(async ()=>{
-      const uid = auth.currentUser?.uid
-      if(!uid || !termId) return
-      const favRef = doc(db, 'profiles', uid, 'favoritos', termId)
-      const snap = await getDoc(favRef)
-      setIsFav(snap.exists())
-    })()
-  },[termId])
+  // Recarregar favoritos sempre que a tela ganhar foco
+  useFocusEffect(
+    React.useCallback(() => {
+      let mounted = true
+      ;(async ()=>{
+        const uid = auth.currentUser?.uid
+        if(!uid || !termId) return
+        const favSet = await getFavoritesSet(uid)
+        const favStatus = favSet.has(termId)
+        console.log('Status favorito do Firestore:', favStatus, 'para termo:', termId)
+        if (mounted) setIsFav(favStatus)
+      })()
+      return () => { mounted = false }
+    }, [termId])
+  )
 
   async function toggleFav(){
     const uid = auth.currentUser?.uid
     if(!uid || !term?.id) return
-    const favRef = doc(db, 'profiles', uid, 'favoritos', term.id)
-    if(isFav){
-      await deleteDoc(favRef)
-      setIsFav(false)
-    }else{
-      await setDoc(favRef, { createdAt: Date.now() })
-      setIsFav(true)
-    }
+    
+    const newFavStatus = !isFav
+    setIsFav(newFavStatus)
+    await toggleFavorite(uid, term.id, newFavStatus)
   }
 
   if(!term){
@@ -75,8 +86,19 @@ export default function TermDetails({ route }){
             {!!subtit && <Text style={{ color:'#6B7280', marginTop:2 }}>{subtit}</Text>}
           </View>
 
-          {/* estrela de favorito */}
-          <Text onPress={toggleFav} style={{ fontSize:22 }}>{isFav ? '⭐' : '☆'}</Text>
+          {/* coração de favorito */}
+          <TouchableOpacity
+            onPress={toggleFav}
+            hitSlop={{ top: 8, left: 8, right: 8, bottom: 8 }}
+            accessibilityRole="button"
+            accessibilityLabel={isFav ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
+          >
+            <Ionicons
+              name={isFav ? 'heart' : 'heart-outline'}
+              size={22}
+              color={isFav ? '#DC2626' : '#9CA3AF'}
+            />
+          </TouchableOpacity>
         </View>
 
         {/* chips */}
