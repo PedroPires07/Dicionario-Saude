@@ -15,6 +15,7 @@ export default function Terms(){
   const [orderBy, setOrderBy] = React.useState('recent'); // 'relevant' ou 'recent'
   const [selectedArea, setSelectedArea] = React.useState('Todos');
   const [selectedCategories, setSelectedCategories] = React.useState([]);
+  const [selectedTermType, setSelectedTermType] = React.useState('Todos'); // 'Todos', 'Científico', 'Popular'
 
   const loadTerms = React.useCallback(async () => {
     try {
@@ -89,6 +90,23 @@ export default function Terms(){
       if (!categoryMatch) return false;
     }
 
+    // Filtro de tipo de termo
+    if (selectedTermType !== 'Todos') {
+      if (selectedTermType === 'Científico') {
+        // Termo é científico se tem nome científico preenchido
+        if (!t.cientifico || t.cientifico.trim() === '' || t.cientifico === '—') {
+          return false;
+        }
+      } else if (selectedTermType === 'Popular') {
+        // Termo é popular se tem nomes populares ou não tem nome científico válido
+        const hasValidScientific = t.cientifico && t.cientifico.trim() !== '' && t.cientifico !== '—';
+        const hasPopularNames = t.populares && t.populares.length > 0;
+        if (hasValidScientific && !hasPopularNames) {
+          return false;
+        }
+      }
+    }
+
     return true;
   });
 
@@ -117,6 +135,7 @@ export default function Terms(){
     setOrderBy('recent');
     setSelectedArea('Todos');
     setSelectedCategories([]);
+    setSelectedTermType('Todos');
     setShowFilters(false);
   }
 
@@ -265,6 +284,37 @@ export default function Terms(){
                     </Text>
                   </TouchableOpacity>
                 ))}
+              </View>
+            </View>
+
+            {/* Tipo de Termo */}
+            <View style={styles.filterSection}>
+              <Text style={styles.filterLabel}>Tipo de Termo</Text>
+              <View style={styles.areaOptions}>
+                <TouchableOpacity
+                  style={[styles.filterOption, selectedTermType === 'Todos' && styles.filterOptionActive]}
+                  onPress={() => setSelectedTermType('Todos')}
+                >
+                  <Text style={[styles.filterOptionText, selectedTermType === 'Todos' && styles.filterOptionTextActive]}>
+                    Todos
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.filterOption, selectedTermType === 'Científico' && styles.filterOptionActive]}
+                  onPress={() => setSelectedTermType('Científico')}
+                >
+                  <Text style={[styles.filterOptionText, selectedTermType === 'Científico' && styles.filterOptionTextActive]}>
+                    Científico
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.filterOption, selectedTermType === 'Popular' && styles.filterOptionActive]}
+                  onPress={() => setSelectedTermType('Popular')}
+                >
+                  <Text style={[styles.filterOptionText, selectedTermType === 'Popular' && styles.filterOptionTextActive]}>
+                    Popular
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
 
